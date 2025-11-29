@@ -14,15 +14,16 @@ import (
 	"fmt"
 	"log"
 	"time"
-	"your-project/claude"
+
+	"github.com/afeiship/go-claude"
 )
 
 func main() {
-	// 方式 1：完全通过配置传入（推荐用于生产）
+	// Method 1: Pass configuration completely (recommended for production)
 	cfg := claude.Config{
-		APIKey:    "sk-ant-xxxxxxxx",           // 来自你的配置中心/secret 管理
-		BaseURL:   "https://api.anthropic.com", // 可省略，默认值
-		Model:     "claude-3-haiku-20240307",   // 可动态指定
+		APIKey:    "sk-ant-xxxxxxxx",           // From your config center/secret management
+		BaseURL:   "https://api.anthropic.com", // Optional, has default value
+		Model:     "claude-3-haiku-20240307",   // Can be dynamically specified
 		MaxTokens: 512,
 		Timeout:   30 * time.Second,
 	}
@@ -32,22 +33,22 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// 使用默认配置
-	reply, err := client.SimplePrompt("你好，Claude！")
+	// Use default configuration
+	reply, err := client.SimplePrompt("Hello, Claude!")
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println("回复1:", reply)
+	fmt.Println("Reply 1:", reply)
 
-	// 临时覆盖模型和 max_tokens（使用 Option）
+	// Temporarily override model and max_tokens (using Option)
 	reply2, err := client.SimplePrompt(
-		"用一句话解释量子计算",
+		"Explain quantum computing in one sentence",
 		claude.WithModel("claude-3-5-sonnet-20241022"),
 		claude.WithMaxTokens(256),
 	)
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println("回复2:", reply2)
+	fmt.Println("Reply 2:", reply2)
 }
 ```
