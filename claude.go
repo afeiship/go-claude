@@ -8,22 +8,22 @@ import (
 	"github.com/go-resty/resty/v2"
 )
 
-// Config 定义客户端配置
+// Config defines the client configuration
 type Config struct {
-	APIKey    string        // 必填
-	BaseURL   string        // 可选，默认 "https://api.anthropic.com"
-	Model     string        // 可选，默认 "claude-3-5-sonnet-20241022"
-	MaxTokens int           // 可选，默认 1024
-	Timeout   time.Duration // 可选，默认 60s
+	APIKey    string        // Required
+	BaseURL   string        // Optional, default "https://api.anthropic.com"
+	Model     string        // Optional, default "claude-3-5-sonnet-20241022"
+	MaxTokens int           // Optional, default 1024
+	Timeout   time.Duration // Optional, default 60s
 }
 
-// Client 是 Claude API 客户端
+// Client is the Claude API client
 type Client struct {
 	config Config
 	client *resty.Client
 }
 
-// Message 表示一条对话消息
+// Message represents a conversation message
 type Message struct {
 	Role    string `json:"role"`
 	Content string `json:"content"`
@@ -44,9 +44,9 @@ type apiResponse struct {
 	Content []contentBlock `json:"content"`
 }
 
-// NewClient 从 Config 创建客户端
+// NewClient creates a client from Config
 func NewClient(cfg Config) (*Client, error) {
-	// 使用环境变量作为 fallback（可选，你也可以完全禁用）
+	// Use environment variables as fallback (optional, you can also disable this completely)
 	if cfg.APIKey == "" {
 		cfg.APIKey = os.Getenv("ANTHROPIC_AUTH_TOKEN")
 	}
@@ -67,10 +67,10 @@ func NewClient(cfg Config) (*Client, error) {
 	}
 
 	if cfg.APIKey == "" {
-		return nil, fmt.Errorf("APIKey 未设置（可通过 Config 或 ANTHROPIC_AUTH_TOKEN 环境变量）")
+		return nil, fmt.Errorf("APIKey not set (can be set via Config or ANTHROPIC_AUTH_TOKEN environment variable)")
 	}
 
-	// 创建 resty 客户端
+	// Create resty client
 	restyClient := resty.New().
 		SetBaseURL(cfg.BaseURL).
 		SetHeader("x-api-key", cfg.APIKey).
@@ -84,11 +84,11 @@ func NewClient(cfg Config) (*Client, error) {
 	}, nil
 }
 
-// CreateMessage 发送多轮消息（高级用法）
+// CreateMessage sends multi-turn messages (advanced usage)
 func (c *Client) CreateMessage(messages []Message, opts ...Option) (*apiResponse, error) {
 	cfg := c.config
 
-	// 应用可选参数覆盖
+	// Apply optional parameter overrides
 	for _, opt := range opts {
 		opt(&cfg)
 	}
@@ -106,13 +106,13 @@ func (c *Client) CreateMessage(messages []Message, opts ...Option) (*apiResponse
 		Post("/v1/messages")
 
 	if err != nil {
-		return nil, fmt.Errorf("请求失败: %w", err)
+		return nil, fmt.Errorf("request failed: %w", err)
 	}
 
 	return &resp, nil
 }
 
-// SimplePrompt 单轮对话快捷方法
+// SimplePrompt single-turn conversation shortcut method
 func (c *Client) SimplePrompt(prompt string, opts ...Option) (string, error) {
 	messages := []Message{{Role: "user", Content: prompt}}
 	resp, err := c.CreateMessage(messages, opts...)
@@ -126,10 +126,10 @@ func (c *Client) SimplePrompt(prompt string, opts ...Option) (string, error) {
 		}
 	}
 
-	return "", fmt.Errorf("响应中无文本内容")
+	return "", fmt.Errorf("no text content in response")
 }
 
-// Option 函数式选项模式，用于动态覆盖配置
+// Option functional option pattern for dynamically overriding configuration
 type Option func(*Config)
 
 func WithModel(model string) Option {
