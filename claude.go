@@ -1,5 +1,7 @@
 package claude
 
+// AI: https://chat.qwen.ai/c/0e693a02-6380-4266-ae86-9b42fe82e988
+
 import (
 	"fmt"
 	"os"
