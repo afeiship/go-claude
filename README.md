@@ -3,7 +3,11 @@
 
 ## installation
 ```sh
+# go mod
 go get -u github.com/afeiship/go-claude
+
+# get specific version
+go get github.com/afeiship/go-claude@v1.0.2
 ```
 
 ## usage
