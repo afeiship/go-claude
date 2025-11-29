@@ -1,4 +1,4 @@
-module github.com/afeiship/claude
+module github.com/afeiship/go-claude
 
 go 1.23.0
 
