@@ -1,6 +1,14 @@
-# rails-module-options
-> Example for rails_options.
+# go-claude
+> A lightweight, idiomatic Go client for the Anthropic Claude API.
 
-## show
-- http://localhost:3000/rails_options/options
+## installation
+```sh
+go get -u github.com/afeiship/go-claude
+```
 
+## usage
+```go
+package main
+
+// code here
+```

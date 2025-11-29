@@ -1,5 +1,11 @@
 {
-  "name": "rails-module-options",
+  "name": "@jswork/go-claude",
   "private": true,
-  "dependencies": {}
+  "version": "1.0.0",
+  "description": "A lightweight, idiomatic Go client for the Anthropic Claude API.",
+  "license": "MIT",
+  "scripts": {
+    "test": "go test __tests__/*.go -v",
+    "release": "release-it"
+  }
 }
